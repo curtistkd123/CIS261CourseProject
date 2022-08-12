@@ -1,0 +1,45 @@
+
+import random
+
+def gameHeading():
+    print("Welcome to the Guessing Game")
+
+def game(limit):
+    numRange = random.randrange(1, int(limit))
+
+    numGuess = input("Guess a number. Hint: it is within your number limit.")
+    while numGuess.isdigit == False or numGuess!= numRange:
+        
+        if numGuess.isdigit==False:
+            numGuess = input("Enter in only a number")
+            continue
+
+        numGuess=int(numGuess)
+
+        if numGuess > numRange:
+            print("Guess is too High. retry")
+            numGuess = input("Enter in only a number")
+
+        elif numGuess < numRange:
+            print("Guess is too low. retry")
+            numGuess = input("Enter in only a number")
+
+        else:
+            print("Your guess is correct!")
+            break
+
+    return input("Would like to play again? y or n")
+
+
+
+
+replay = "y" 
+while replay == "y" or replay =="Y":
+
+    limit = input("Enter a number for a limit")
+    while limit.isdigit == False:
+        limit = input("Enter in only numbers")
+
+    replay = game(limit)
+
+print("Thank you for playing. Bye")

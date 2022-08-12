@@ -1,0 +1,13 @@
+def convertToCelc(num):
+    celc = (((num - 32)*5)/9)
+    return celc
+
+def convertToFahr(num):
+    fahr = (((num * 9)/5)+32)
+    return fahr
+
+for x in range(0,212,40):
+        print(str(x)+" Fahrenheit = "+str(round(convertToCelc(x),2))+" Celcius")
+
+for x in range(0,100,20):
+    print(str(x)+" Celcius = "+str(round(convertToFahr(x),2))+" Fahrenheit")

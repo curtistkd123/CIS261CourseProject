@@ -1,0 +1,165 @@
+from calendar import month
+from calendar import monthrange
+from datetime import date
+from datetime import timedelta
+import datetime
+import re
+
+ans = "y"
+
+nightRate = 85.00
+augRate = 105.00
+
+
+def checkMonthInput(month):
+    
+    if month.isdigit() == False:
+        if re.search("jan",month,re.IGNORECASE):
+            month = 1
+        elif re.search("feb",month,re.IGNORECASE):
+            month = 2
+        elif re.search("mar",month,re.IGNORECASE):
+            month = 3
+        elif re.search("apr",month,re.IGNORECASE):
+            month = 4
+        elif re.search("may",month,re.IGNORECASE):
+            month = 5
+        elif re.search("jun",month,re.IGNORECASE):
+            month = 6
+        elif re.search("jul",month,re.IGNORECASE):
+            month = 7
+        elif re.search("aug",month,re.IGNORECASE):
+            month = 8
+        elif re.search("sep",month,re.IGNORECASE):
+            month = 9
+        elif re.search("oct",month,re.IGNORECASE):
+            month = 10
+        elif re.search("nov",month,re.IGNORECASE):
+            month = 11
+        elif re.search("dec",month,re.IGNORECASE):
+            month = 12
+
+    if int(month) > 12:
+        while int(month) > 12:
+            month = input("Month number is out or range. Enter in correct month number 1-12")
+            month = int(month)
+    return int(month)
+
+def checkDayInput( month, day):
+    valid = False
+    
+    if int(day) > 28 or int(day) ==0:
+        while valid == False:
+            if (month == 1 or month == 3 or month == 5 or month == 7 or month ==8 or month ==10 or month == 12) and (int(day) > 31 or int(day) ==0):
+                day = input("Day is out of range. must be 31 or less. Enter in correct day")
+                if int(day) <=31:
+                    valid = True
+
+            if (month == 4 or month == 6 or month == 9 or month == 11) and (int(day) >30 or int(day) == 0):
+                day = input("This month only has 30 days in it. Enter in correct date")
+                if int(day) <=30:
+                    valid = True
+
+            if month ==2 and int(day) > 29 or int(day) ==0:
+                day = input("Febr only has a max of 29 days in it. Please enter correct date")
+                if int(day) <=29:
+                    valid = True
+            else:
+                valid=True
+
+    return int(day)
+
+def checkYearInput(year):
+
+    valid = False
+    while valid == False:
+        if year.isdigit() == False:
+            year = input("Please enter only numbers for year")
+
+        if year.isdigit() == True:
+            valid = True
+
+    if len(year) == 2:
+        year = "20"+year
+
+    return int(year)
+
+print("Hotel Reservations")
+
+ans = input("Make a reservation? y or n")
+while ans == "y" or ans =="Y":
+    today = datetime.datetime.now()
+    arrivalDate = today - timedelta(days=1)
+    departDate = arrivalDate
+    daysOfReserv = 0
+    DaysInAug = 0
+    while arrivalDate < today or arrivalDate == None:
+        month = input("enter the month, name or number")
+        month = checkMonthInput(month)
+
+        day =input("enter in day of arrival")
+        day = checkDayInput(month,day)
+
+        year = input("Enter in year")
+        year = checkYearInput(year)
+
+        arrivalDate = datetime.datetime(year, month, day)
+        if arrivalDate < today:
+            print("Arrival cant be before today's date. Please retry")
+            continue
+
+        print(arrivalDate)
+
+    print("Now to enter Departure date")
+
+    while departDate < arrivalDate or departDate == None:
+        month = input("enter the month, name or number")
+        month = checkMonthInput(month)
+
+        day =input("enter in day of departure")
+        day = checkDayInput(month,day)
+
+        year = input("Enter in year")
+        year = checkYearInput(year)
+
+        departDate = datetime.datetime(year, month, day)
+        if departDate < arrivalDate:
+            print("Departure cant be before arrival date. Please retry")
+            continue
+
+        print(departDate)
+
+    print("second section is complete")
+        
+    if daysOfReserv ==0:
+        start_date = arrivalDate
+        while start_date <= departDate:
+            daysOfReserv+=1
+            if start_date.month==8:
+                DaysInAug+=1
+            start_date+= timedelta(days=1)
+    
+    price = (daysOfReserv-DaysInAug)*nightRate
+
+    if DaysInAug >0:
+        price += DaysInAug*augRate
+    print("\nArrival Date: " +arrivalDate.strftime("%B %d, %Y"))
+    print("Departure Date: "+departDate.strftime("%B %d, %Y"))
+    print("Nightly rate: $"+str(nightRate))
+    print("Total Nights: "+str(daysOfReserv))
+    if DaysInAug >0:
+        print("August rate: $"+str(augRate))
+        print("Night in Aug: "+str(DaysInAug))
+    print("Total Price: $"+str(price))
+
+    
+    ans = input("\nWould you like to make new reservation? y to contine or n to exit  ")
+    if ans =="n" or ans=="N":
+        print("GoodBye! Looking forward to seeing you on "+arrivalDate.strftime("%B %d, %Y"))
+
+
+
+
+
+
+
