@@ -1,0 +1,35 @@
+
+def enterPrice():
+
+    valid = False
+    while valid == False:
+        try:
+            price = float(input("Enter a price\t"))            
+            break
+        except ValueError:
+            print("Input is not a price/numeric value")
+        
+    return price
+
+def enterQuantity():
+    
+    while True:
+        try:
+            quantity = int(input("Enter quantity\t"))            
+            break
+        except ValueError:
+            print("input must be a number")
+
+    return quantity
+    
+while True:
+    price = enterPrice()
+    quantity = enterQuantity()
+    total = price*quantity
+
+    print("Price:\t\t$"+str(price)+"\nQuantity:\t"+str(quantity)+"\nTotal:\t\t$"+str(total))
+    ans = input("Enter another line item? (y/n):\t")
+
+    if ans == "n":
+        break
+print("Bye")

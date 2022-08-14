@@ -48,8 +48,6 @@ def viewCountry(CountryList):
 
 def addCountry(CountryList):
     valid = False
-    name=""
-    
     while valid != True:
         num = 0
         x = input("\nEnter country code: ")
@@ -76,8 +74,7 @@ def addCountry(CountryList):
                         CountryList[code]=a.title()
                         valid2=True
                         valid=True
-                        print("New Country is added")
-                        
+                        print("New Country is added")          
         else:
             print("Code has to be 2 digits")        
 
