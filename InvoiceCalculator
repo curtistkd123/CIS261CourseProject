@@ -21,7 +21,8 @@ def enterQuantity():
             print("input must be a number")
 
     return quantity
-    
+
+print("The Invoice Lint Item Calculator\n")    
 while True:
     price = enterPrice()
     quantity = enterQuantity()
