@@ -1,0 +1,111 @@
+operation= 0
+CountryList = {"CA":"Canada","MX":"Mexico","US":"United States"
+    }
+def Menu ():
+    valid = False
+    print("\nCOMMAND MENU\n view - View contry name\n add - Add a country\n del - Delete a country\n exit - Exit program")
+    
+    while valid != True:
+        command = input("Command: ")
+                
+        if command == "view":
+            operation = 1
+            valid = True
+        elif command == "add":
+            operation=2
+            valid = True
+        elif command == "del":
+            operation =3
+            valid = True
+        elif command == "exit":
+            operation = 4
+            valid = True
+        else:
+            print("Not a valid command. Please try again.")
+    return int(operation)
+
+
+
+def viewCountry(CountryList):
+    valid = False
+    
+    while valid !=True:
+        keys =""
+        for x,y in CountryList.items():
+            keys +=x+" "
+        print("\nCountry codes: "+keys)
+
+        code= input("Enter country code: ")
+        for x,y in CountryList.items():
+            if code.upper() == x:
+                print("Country name: "+y)
+                valid = True
+                break
+        if valid != True:
+            print("There is no country with that code.")
+
+
+
+def addCountry(CountryList):
+    valid = False
+    name=""
+    
+    while valid != True:
+        num = 0
+        x = input("\nEnter country code: ")
+        code = x.upper()
+        if len(code)==2:
+            for x,y in CountryList.items():
+                if code.upper() == x.upper():
+                    print(y+" is already using this code ")
+                    num = 1
+                    break
+                
+            if num == 0:
+                valid2=False
+                while valid2 != True:
+                    num = 0
+                    a = input("Enter country name: ")
+                    
+                    for c,n in CountryList.items():
+                        
+                        if a.title() == n.title():
+                            print(n+" is already a name for a country in the list")
+                            num = 1
+                    if num ==0:
+                        CountryList[code]=a.title()
+                        valid2=True
+                        valid=True
+                        print("New Country is added")
+                        
+        else:
+            print("Code has to be 2 digits")        
+
+
+
+def delCountry(CountryList):
+    valid = False
+    code=""
+    while valid == False:
+        code = input("\nEnter country code: ")
+        for x,y in CountryList.items():
+                if code.upper() == x:
+                    print(y+" is deleted")
+                    CountryList.pop(x)
+                    valid = True
+                    break
+        if valid == False:
+            print("Code does not exist")
+
+operation = Menu()
+while operation !=4:
+    if operation == 1:
+        viewCountry(CountryList)
+        operation = Menu()
+    if operation == 2:
+        addCountry(CountryList)
+        operation = Menu()
+    if operation == 3: 
+        delCountry(CountryList)
+        operation = Menu()
+print("\nBye!")
