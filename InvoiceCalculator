@@ -7,7 +7,7 @@ def enterPrice():
             price = float(input("Enter a price\t"))            
             break
         except ValueError:
-            print("Input is not a price/numeric value")
+            print("Input is not a decimal value")
         
     return price
 
