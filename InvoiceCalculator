@@ -4,7 +4,7 @@ def enterPrice():
     valid = False
     while valid == False:
         try:
-            price = float(input("Enter a price\t"))            
+            price = float(input("\nEnter a price\t"))            
             break
         except ValueError:
             print("Input is not a decimal value")
@@ -15,20 +15,20 @@ def enterQuantity():
     
     while True:
         try:
-            quantity = int(input("Enter quantity\t"))            
+            quantity = int(input("\nEnter quantity\t"))            
             break
         except ValueError:
             print("input must be a number")
 
     return quantity
 
-print("The Invoice Lint Item Calculator\n")    
+print("The Invoice Line Item Calculator\n")    
 while True:
     price = enterPrice()
     quantity = enterQuantity()
     total = price*quantity
 
-    print("Price:\t\t$"+str(price)+"\nQuantity:\t"+str(quantity)+"\nTotal:\t\t$"+str(total))
+    print("\nPrice:\t\t$"+str(price)+"\nQuantity:\t"+str(quantity)+"\nTotal:\t\t$"+str(total))
     ans = input("Enter another line item? (y/n):\t")
 
     if ans == "n":
