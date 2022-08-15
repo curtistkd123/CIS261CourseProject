@@ -1,9 +1,9 @@
-
+import os
 operation= 0
 MovieList = []
 def Menu ():
     valid = False
-    print("COMMAND MENU\n list - List all movies\n add - Add a movie\n del - Delete a movie\n exit - Exit program")
+    print("\nCOMMAND MENU\n list - List all movies\n add - Add a movie\n del - Delete a movie\n exit - Exit program")
     
     while valid != True:
         command = input("Command: ")
@@ -26,9 +26,11 @@ def Menu ():
     return int(operation)
 
 def populateList(MovieList):
-    MovieList.append("Jurrasic Park")
-    MovieList.append("Avengers")
-    MovieList.append("Day After Tomorrow")
+    f = open("movies.txt","r")
+    
+    for x in f:
+        MovieList.append(x)
+
 
 def displayMovies(MovieList):
     for i in range(len(MovieList)):
@@ -45,6 +47,19 @@ def addMovie(MovieList):
             MovieList.append(name)
             valid = True
 
+def writeToFile(MovieList):
+    f = open("movies.txt","a+")
+    
+    for x in MovieList:
+        new = True
+        for y in f:
+            if str(x)==str(y):
+                print("Movie already exist in file")
+                new = False
+                break
+        if new == True:
+            f.write("%s\n"%x)
+
 
 def delMovie(MovieList):
     valid = False
@@ -56,6 +71,14 @@ def delMovie(MovieList):
             MovieList.pop(num-1)
             valid = True
 
+def delMovieFromFile(MovieList):
+    
+    os.remove("movies.txt")
+    f = open("movies.txt","w")
+    for x in MovieList:
+        f.write("%s\n"%x)
+    
+
 operation = Menu()
 populateList(MovieList)
 
@@ -65,8 +88,12 @@ while operation !=4:
         operation = Menu()
     if operation == 2:
         addMovie(MovieList)
+        writeToFile(MovieList)
+        displayMovies(MovieList)
         operation = Menu()
     if operation == 3: 
         delMovie(MovieList)
+        delMovieFromFile(MovieList)
+        displayMovies(MovieList)
         operation = Menu()
 print("Bye!")
