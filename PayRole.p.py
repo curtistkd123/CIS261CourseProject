@@ -2,10 +2,13 @@
 from cgi import test
 from tokenize import group
 from unicodedata import name
+import datetime
 
 
 class Employee:
     name = ""
+    todate = ""
+    fromdate=""
     totalHours = 0
     hourlyRate = 0
     taxRate = 0
@@ -26,16 +29,51 @@ class Employee:
 
 EmpList = []
 
-def EmpNameList (EmpList):
-    name = input("Enter Employee's name")
+def datesWorked():
+    payperiod = {"fromDate":"","todate":""}
+    while True:
+        while True:
+            try:
+                date_string = input("Enter starting workday of pay period for employee:\t")
+                date_format = "%m/%d/%Y"
+                fromdate = datetime.datetime.strptime(date_string,date_format) 
+                payperiod.update({"fromdate": fromdate})
+                break
+            except ValueError:
+                print("Incorrect date format, should be mm/dd/yyyy")
+
+        while True:
+            try:
+                date_string = input("Enter last workday of pay period for employee:\t")
+                date_format = "%m/%d/%Y"
+                todate = datetime.datetime.strptime(date_string,date_format) 
+                payperiod.update({"todate":todate})
+                break
+            except ValueError:
+                print("Incorrect date format, should be mm/dd/yyyy")
+        
+        if todate < fromdate:
+            print("end date cannot be before start date")
+        
+        elif todate > fromdate:
+            break
+
+    return payperiod
+
+def EmpNameList (EmpList,payperiod):
+    count = 0
+    name = input("Enter Employee's name\t")
     while name.isalpha == False:
         name = input("Name must contain letters")
     emp = Employee(name)
-    EmpList.append(emp)               
+    emp.fromdate = payperiod.get("fromdate")
+    emp.todate = payperiod.get("todate")  
+
+    EmpList.append(emp)
     return emp
 
 def EmpWorkHours (Employee):
-    hours = input("Enter hours worked for "+str(Employee.name)+" " )
+    hours = input("Enter hours worked for "+str(Employee.name)+"\t" )
     while hours.isdigit() == False:
         hours = input("Please enter only numbers")
 
@@ -66,39 +104,41 @@ def CalculatePay (Employee):
     return Employee
 
 def DisplayEmployee (Employee):
-    print("Employee Name: "+str(Employee.name))
-    print("Hours worked: "+str(Employee.totalHours))
-    print("Hourly Rate: "+str(Employee.hourlyRate))
-    print("Tax Rate: ."+str(Employee.taxRate))
-    print("GrossPay: $"+str(Employee.grossPay))
-    print("Income Tax: $"+str(Employee.incomeTax))
-    print("Net Pay: $"+str(Employee.netPay))
+    print("Pay Period Start date:\t"+str(Employee.fromdate.strftime("%m/%d/%Y")))
+    print("Pay Period End Date:\t"+str(Employee.todate.strftime("%m/%d/%Y")))
+    print("Employee Name:\t"+str(Employee.name))
+    print("Hours worked:\t"+str(Employee.totalHours))
+    print("Hourly Rate:\t"+str(Employee.hourlyRate))
+    print("Tax Rate:\t."+str(Employee.taxRate))
+    print("GrossPay:\t$"+str(Employee.grossPay))
+    print("Income Tax:\t$"+str(Employee.incomeTax))
+    print("Net Pay:\t$"+str(Employee.netPay))
 
 def GroupTotals (EmpList):
     groupTotalHrs = 0
     groupTotalTax = 0
     groupTotalNet = 0
     count = 0
+    
     for employee in EmpList:
         count=count+1
         groupTotalHrs=groupTotalHrs+employee.totalHours
         groupTotalTax=groupTotalTax+employee.incomeTax
         groupTotalNet=groupTotalNet+employee.netPay
-
-    print("\n# of Employees: "+str(count))
-    print("Group Hours: "+str(groupTotalHrs))
-    print("Group Tax: $"+str(groupTotalTax))
-    print("Group Net: $"+str(groupTotalNet))
+    print("\n# of Employees:\t"+str(count)+"\nGroup Hours:\t"+str(groupTotalHrs)+"\nGroup Tax:\t$"+str(groupTotalTax)+"\nGroup Net:\t$"+str(groupTotalNet))
 
 
 ans = ""
 x = 1
 while x == 1:
+    
+    payperiod = datesWorked()
+    DisplayEmployee(CalculatePay(EmpTaxRate(EmpHrRate(EmpWorkHours(EmpNameList(EmpList,payperiod))))))
 
-    DisplayEmployee(CalculatePay(EmpTaxRate(EmpHrRate(EmpWorkHours(EmpNameList(EmpList))))))
 
-    GroupTotals(EmpList)
 
     ans = input("\nenter anything to continue. if you want to exit type: end\n")
     if ans == "end" or ans == "End":
         x = 0
+
+GroupTotals(EmpList)
