@@ -1,11 +1,9 @@
 
-
 from re import IGNORECASE
 from tokenize import group
 import traceback
 from unicodedata import name
 import datetime
-
 
 class Employee:
     name = ""
@@ -27,7 +25,6 @@ class Employee:
         self.grossPay = 0
         self.incomeTax = 0
         self.netPay = 0
-
 
 EmpList = []
 
@@ -70,7 +67,6 @@ def EmpNameList (EmpList,payperiod):
     emp = Employee(name)
     emp.fromdate = payperiod.get("fromdate")
     emp.todate = payperiod.get("todate")  
-
     EmpList.append(emp)
     return emp
 
@@ -85,8 +81,8 @@ def EmpWorkHours (Employee):
 def EmpHrRate (Employee):
     hrRate = input("Enter "+str(Employee.name)+"'s hourly rate ")
     while hrRate.isdigit==False:
-
         hrRate = input("Please enter only numbers ")
+
     Employee.hourlyRate = int(hrRate)
     return Employee
 
@@ -147,6 +143,7 @@ def GroupTotals (EmpList):
         groupTotalHrs=groupTotalHrs+int(employee.totalHours)
         groupTotalTax=groupTotalTax+int(employee.incomeTax)
         groupTotalNet=groupTotalNet+int(employee.netPay)
+
     print("\n# of Employees:\t"+str(count)+"\nGroup Hours:\t"+str(groupTotalHrs)+"\nGroup Tax:\t$"+str(groupTotalTax)+"\nGroup Net:\t$"+str(groupTotalNet))
 
 def saveEmpList(EmpList):
@@ -186,49 +183,39 @@ def runPayrole():
     while True:
         payRoleRange = input("Enter all or the date you want to go as far back for payrole data\t")
         if payRoleRange == "all":
-            for emp in payroleList:
-                DisplayEmployee(emp)
+            CalculatePays(payroleList)
+            GroupTotals(payroleList)
+            DisplayEmployees(payroleList)
             break
         else:
             try:
                 startdate = datetime.datetime.strptime(payRoleRange,date_format) 
                 for employee in payroleList:
-                    
                     if employee.fromdate >= startdate:
-                        shortList.append(employee)   
+                        shortList.append(employee) 
+                if len(shortList) == 0:
+                    print("No Employees in this list")
+                else:
+                    CalculatePays(shortList)
+                    GroupTotals(shortList)
+                    DisplayEmployees(shortList)
                 break
             except ValueError:
                     print("Incorrect date format, should be mm/dd/yyyy or enter all\n")
                     traceback.print_exc
-
-    if len(shortList) == 0:
-        print("No Employees in this list")
-    else:
-        CalculatePays(shortList)
-        GroupTotals(shortList)
-        DisplayEmployees(shortList)
-
-
-
-
-
-
 
 ans = ""
 x = 1
 while x == 1:
     
     payperiod = datesWorked()
-    DisplayEmployee(CalculatePay(EmpTaxRate(EmpHrRate(EmpWorkHours(EmpNameList(EmpList,payperiod))))))
-
-
+    CalculatePay(EmpTaxRate(EmpHrRate(EmpWorkHours(EmpNameList(EmpList,payperiod)))))
 
     ans = input("\nenter anything to continue. if you want to exit type: end\n")
     if ans == "end" or ans == "End":
         x = 0
 
-
 saveEmpList(EmpList)
-readEmpList()
+"""readEmpList()"""
 runPayrole()
 
